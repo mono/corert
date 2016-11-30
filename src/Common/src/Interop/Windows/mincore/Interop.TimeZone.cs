@@ -48,15 +48,31 @@ internal static partial class Interop
         }
 
         [DllImport("api-ms-win-core-timezone-l1-1-0.dll")]
+#if !MONO
         internal extern static uint EnumDynamicTimeZoneInformation(uint dwIndex, out TIME_DYNAMIC_ZONE_INFORMATION lpTimeZoneInformation);
+#else
+        internal extern static uint EnumDynamicTimeZoneInformation(uint dwIndex, TIME_DYNAMIC_ZONE_INFORMATION* lpTimeZoneInformation);
+#endif
 
         [DllImport("api-ms-win-core-timezone-l1-1-0.dll")]
+#if !MONO
         internal extern static uint GetDynamicTimeZoneInformation(out TIME_DYNAMIC_ZONE_INFORMATION pTimeZoneInformation);
+#else
+        internal extern static uint GetDynamicTimeZoneInformation(TIME_DYNAMIC_ZONE_INFORMATION* pTimeZoneInformation);
+#endif
 
         [DllImport("api-ms-win-core-timezone-l1-1-0.dll")]
+#if !MONO
         internal extern static uint GetDynamicTimeZoneInformationEffectiveYears(ref TIME_DYNAMIC_ZONE_INFORMATION lpTimeZoneInformation, out uint FirstYear, out uint LastYear);
+#else
+        internal extern static uint GetDynamicTimeZoneInformationEffectiveYears(TIME_DYNAMIC_ZONE_INFORMATION* lpTimeZoneInformation, out uint FirstYear, out uint LastYear);
+#endif
 
         [DllImport("api-ms-win-core-timezone-l1-1-0.dll")]
+#if !MONO
         internal extern static bool GetTimeZoneInformationForYear(ushort wYear, ref TIME_DYNAMIC_ZONE_INFORMATION pdtzi, out TIME_ZONE_INFORMATION ptzi);
+#else
+        internal extern static bool GetTimeZoneInformationForYear(ushort wYear, TIME_DYNAMIC_ZONE_INFORMATION* pdtzi, TIME_ZONE_INFORMATION* ptzi);
+#endif
     }
 }
