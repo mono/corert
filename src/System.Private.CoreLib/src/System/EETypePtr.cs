@@ -12,6 +12,9 @@
 ===========================================================*/
 
 using System.Runtime;
+#if MONO
+using System.Diagnostics.Private;
+#endif
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;

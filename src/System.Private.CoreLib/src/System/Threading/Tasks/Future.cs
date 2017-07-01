@@ -12,6 +12,9 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 using System.Runtime.CompilerServices;
+#if MONO
+using System.Diagnostics.Private;
+#endif
 using System.Diagnostics;
 
 

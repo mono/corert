@@ -11,6 +11,9 @@
 **
 =============================================================================*/
 
+#if MONO
+using System.Diagnostics.Private;
+#endif
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
@@ -30,6 +33,10 @@ namespace System.Threading
         protected static readonly IntPtr InvalidHandle = Interop.InvalidHandleValue;
 
         internal SafeWaitHandle _waitHandle;
+
+#pragma warning disable 414  // Field is not used from managed.
+        private IntPtr waitHandle;  // !!! DO NOT MOVE THIS FIELD. (See defn of WAITHANDLEREF in object.h - has hardcoded access to this field.)
+#pragma warning restore 414
 
         internal enum OpenExistingResult
         {
@@ -86,6 +93,12 @@ namespace System.Threading
 
             set
             { _waitHandle = value; }
+        }
+
+        internal void SetHandleInternal(SafeWaitHandle handle)
+        {
+            SafeWaitHandle = handle;
+            waitHandle = handle.DangerousGetHandle();
         }
 
         internal static int ToTimeoutMilliseconds(TimeSpan timeout)

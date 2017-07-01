@@ -130,6 +130,7 @@ internal partial class Interop
     }
 }
 
+#if !MONO
 namespace System.Runtime.InteropServices
 {
     internal class Marshal
@@ -177,3 +178,4 @@ namespace System.Runtime.InteropServices
 #endif
     }
 }
+#endif

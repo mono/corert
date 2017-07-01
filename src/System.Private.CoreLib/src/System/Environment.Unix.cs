@@ -8,7 +8,10 @@ using System.Threading;
 
 namespace System
 {
-    internal static partial class Environment
+#if !MONO 
+    internal 
+#endif
+    static partial class Environment
     {
         internal static int CurrentNativeThreadId => ManagedThreadId.Current;
 
@@ -20,7 +23,9 @@ namespace System
             }
         }
 
+#if !MONO
         public static int ProcessorCount => (int)Interop.Sys.SysConf(Interop.Sys.SysConfName._SC_NPROCESSORS_ONLN);
+#endif
 
         private static int ComputeExecutionId()
         {

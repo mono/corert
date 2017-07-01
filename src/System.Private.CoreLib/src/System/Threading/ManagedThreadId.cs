@@ -9,6 +9,9 @@
 //
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+#if MONO
+using System.Diagnostics.Private;
+#endif
 using Internal.Runtime.Augments;
 using System.Diagnostics;
 

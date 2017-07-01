@@ -3,6 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+#if MONO
+using System.Diagnostics.Private;
+#endif
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
@@ -267,7 +270,7 @@ namespace System.Runtime
         //
         // calls to runtime for type equality checks
         //
-
+#if !MONO
         [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhTypeCast_AreTypesEquivalent")]
         internal static extern bool AreTypesEquivalent(EETypePtr pType1, EETypePtr pType2);
@@ -275,11 +278,13 @@ namespace System.Runtime
         [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhTypeCast_AreTypesAssignable")]
         internal static extern bool AreTypesAssignable(EETypePtr pSourceType, EETypePtr pTargetType);
+#endif
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhTypeCast_CheckArrayStore")]
         internal static extern void RhCheckArrayStore(Object array, Object obj);
 
+#if !MONO
         [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhTypeCast_IsInstanceOf")]
         internal static extern object IsInstanceOf(object obj, EETypePtr pTargetType);
@@ -330,6 +335,7 @@ namespace System.Runtime
         [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhUnbox")]
         internal static extern unsafe void RhUnbox(object obj, ref byte data, EETypePtr pUnboxToEEType);
+#endif
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhMemberwiseClone")]
@@ -363,10 +369,10 @@ namespace System.Runtime
             return RhCompatibleReentrantWaitAny(alertable ? 1 : 0, timeout, count, handles);
         }
 
+#if !MONO
         //
         // EEType interrogation methods.
         //
-
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhGetGCDescSize")]
         internal static extern int RhGetGCDescSize(EETypePtr eeType);
@@ -383,6 +389,7 @@ namespace System.Runtime
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhResolveDispatch")]
         internal static extern IntPtr RhResolveDispatch(object pObject, EETypePtr pInterfaceType, ushort slot);
+#endif
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhpResolveInterfaceMethod")]
@@ -416,9 +423,11 @@ namespace System.Runtime
         [RuntimeImport(RuntimeLibrary, "RhGetThreadLocalStorageForDynamicType")]
         internal static extern IntPtr RhGetThreadLocalStorageForDynamicType(int index, int tlsStorageSize, int numTlsCells);
 
+#if !MONO
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhResolveDispatchOnType")]
         internal static extern IntPtr RhResolveDispatchOnType(EETypePtr instanceType, EETypePtr interfaceType, ushort slot);
+#endif
 
         // Keep in sync with RH\src\rtu\runtimeinstance.cpp
         internal enum RuntimeHelperKind
@@ -430,6 +439,7 @@ namespace System.Runtime
             CheckArrayElementType,
         }
 
+#if !MONO
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhGetRuntimeHelperForType")]
         internal static extern unsafe IntPtr RhGetRuntimeHelperForType(EETypePtr pEEType, RuntimeHelperKind kind);
@@ -437,6 +447,7 @@ namespace System.Runtime
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhGetDispatchMapForType")]
         internal static extern unsafe IntPtr RhGetDispatchMapForType(EETypePtr pEEType);
+#endif
 
         //
         // Support for GC and HandleTable callouts.
@@ -458,6 +469,7 @@ namespace System.Runtime
         [RuntimeImport(RuntimeLibrary, "RhUnregisterGcCallout")]
         internal static extern void RhUnregisterGcCallout(GcRestrictedCalloutKind eKind, IntPtr pCalloutMethod);
 
+#if !MONO
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhRegisterRefCountedHandleCallback")]
         internal static extern bool RhRegisterRefCountedHandleCallback(IntPtr pCalloutMethod, EETypePtr pTypeFilter);
@@ -465,11 +477,13 @@ namespace System.Runtime
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhUnregisterRefCountedHandleCallback")]
         internal static extern void RhUnregisterRefCountedHandleCallback(IntPtr pCalloutMethod, EETypePtr pTypeFilter);
+#endif
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhIsPromoted")]
         internal static extern bool RhIsPromoted(object obj);
 
+#if !MONO
         //
         // Blob support
         //
@@ -485,11 +499,13 @@ namespace System.Runtime
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhpCreateTypeManager")]
         internal static extern unsafe TypeManagerHandle RhpCreateTypeManager(IntPtr osModule, IntPtr moduleHeader, IntPtr* pClasslibFunctions, int nClasslibFunctions);
+#endif
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhpRegisterOsModule")]
         internal static extern unsafe IntPtr RhpRegisterOsModule(IntPtr osModule);
 
+#if !MONO
         [RuntimeImport(RuntimeLibrary, "RhpGetModuleSection")]
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         private static extern IntPtr RhGetModuleSection(ref TypeManagerHandle module, ReadyToRunSectionType section, out int length);
@@ -498,6 +514,7 @@ namespace System.Runtime
         {
             return RhGetModuleSection(ref module, section, out length);
         }
+#endif
 
 #if CORERT
         internal static uint RhGetLoadedOSModules(IntPtr[] resultArray)
@@ -523,19 +540,22 @@ namespace System.Runtime
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhGetLoadedOSModules")]
         internal static extern uint RhGetLoadedOSModules(IntPtr[] resultArray);
+#if !MONO
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhGetLoadedModules")]
         internal static extern uint RhGetLoadedModules(TypeManagerHandle[] resultArray);
+#endif
 #endif
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhGetOSModuleFromPointer")]
         internal static extern IntPtr RhGetOSModuleFromPointer(IntPtr pointerVal);
 
+#if !MONO
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhGetModuleFromEEType")]
         internal static extern TypeManagerHandle RhGetModuleFromEEType(IntPtr pEEType);
-
+#endif
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhGetOSModuleFromEEType")]
         internal static extern IntPtr RhGetOSModuleFromEEType(IntPtr pEEType);
@@ -544,9 +564,11 @@ namespace System.Runtime
         [RuntimeImport(RuntimeLibrary, "RhGetOSModuleForMrt")]
         internal static extern IntPtr RhGetOSModuleForMrt();
 
+#if !MONO
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhGetThreadStaticFieldAddress")]
         internal static extern unsafe byte* RhGetThreadStaticFieldAddress(EETypePtr pEEType, IntPtr fieldCookie);
+#endif
 
 #if CORERT
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -614,7 +636,7 @@ namespace System.Runtime
         [RuntimeImport(RuntimeLibrary, "RhGetCurrentThreadStackBounds")]
         internal static extern void RhGetCurrentThreadStackBounds(out IntPtr pStackLow, out IntPtr pStackHigh);
 
-#if PLATFORM_UNIX
+#if PLATFORM_UNIX || MONO
         [MethodImpl(MethodImplOptions.InternalCall)]
         [RuntimeImport(RuntimeLibrary, "RhSetThreadExitCallback")]
         internal static extern bool RhSetThreadExitCallback(IntPtr pCallback);

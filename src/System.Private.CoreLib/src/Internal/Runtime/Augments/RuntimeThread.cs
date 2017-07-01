@@ -4,6 +4,9 @@
 
 using Microsoft.Win32.SafeHandles;
 using System;
+#if MONO
+using System.Diagnostics.Private;
+#endif
 using System.Diagnostics;
 using System.Runtime;
 using System.Runtime.InteropServices;

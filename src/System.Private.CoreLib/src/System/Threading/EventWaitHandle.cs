@@ -18,6 +18,9 @@ using System.Runtime.InteropServices;
 using System.Diagnostics.Contracts;
 using Microsoft.Win32.SafeHandles;
 using System.IO;
+#if MONO
+using System.Diagnostics.Private;
+#endif
 using System.Diagnostics;
 
 namespace System.Threading

@@ -5,6 +5,9 @@
 #pragma warning disable 0420 //passing volatile fields by ref
 
 
+#if MONO
+using System.Diagnostics.Private;
+#endif
 using System.Diagnostics;
 
 namespace System.Threading

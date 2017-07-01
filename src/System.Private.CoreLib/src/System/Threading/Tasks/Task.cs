@@ -13,6 +13,9 @@
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+#if MONO
+using System.Diagnostics.Private;
+#endif
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;

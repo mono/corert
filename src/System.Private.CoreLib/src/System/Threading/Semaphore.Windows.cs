@@ -2,7 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#if MONO
+using System.Diagnostics.Private;
+#else
 using System.Diagnostics;
+#endif
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
