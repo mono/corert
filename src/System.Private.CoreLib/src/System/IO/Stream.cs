@@ -3,6 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+#if MONO
+using System.Diagnostics.Private;
+using System.Runtime.ExceptionServices;
+#endif
 using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Threading.Tasks;
@@ -738,5 +742,90 @@ namespace System.IO
                     _stream.EndWrite(asyncResult);
             }
         }
+
+#if MONO
+        /// <summary>Used as the IAsyncResult object when using asynchronous IO methods on the base Stream class.</summary>
+        internal sealed class SynchronousAsyncResult : IAsyncResult {
+            
+            private readonly Object _stateObject;            
+            private readonly bool _isWrite;
+            private ManualResetEvent _waitHandle;
+            private ExceptionDispatchInfo _exceptionInfo;
+
+            private bool _endXxxCalled;
+            private Int32 _bytesRead;
+
+            internal SynchronousAsyncResult(Int32 bytesRead, Object asyncStateObject) {
+                _bytesRead = bytesRead;
+                _stateObject = asyncStateObject;
+                //_isWrite = false;
+            }
+
+            internal SynchronousAsyncResult(Object asyncStateObject) {
+                _stateObject = asyncStateObject;
+                _isWrite = true;
+            }
+
+            internal SynchronousAsyncResult(Exception ex, Object asyncStateObject, bool isWrite) {
+                _exceptionInfo = ExceptionDispatchInfo.Capture(ex);
+                _stateObject = asyncStateObject;
+                _isWrite = isWrite;                
+            }
+
+            public bool IsCompleted {
+                // We never hand out objects of this type to the user before the synchronous IO completed:
+                get { return true; }
+            }
+
+            public WaitHandle AsyncWaitHandle {
+                get {
+                    return LazyInitializer.EnsureInitialized(ref _waitHandle, () => new ManualResetEvent(true));                    
+                }
+            }
+
+            public Object AsyncState {
+                get { return _stateObject; }
+            }
+
+            public bool CompletedSynchronously {
+                get { return true; }
+            }
+
+            internal void ThrowIfError() {
+                if (_exceptionInfo != null)
+                    _exceptionInfo.Throw();
+            }                        
+
+            internal static Int32 EndRead(IAsyncResult asyncResult) {
+
+                SynchronousAsyncResult ar = asyncResult as SynchronousAsyncResult;
+                if (ar == null || ar._isWrite)
+                    __Error.WrongAsyncResult();
+
+                if (ar._endXxxCalled)
+                    __Error.EndReadCalledTwice();
+
+                ar._endXxxCalled = true;
+
+                ar.ThrowIfError();
+                return ar._bytesRead;
+            }
+
+            internal static void EndWrite(IAsyncResult asyncResult) {
+
+                SynchronousAsyncResult ar = asyncResult as SynchronousAsyncResult;
+                if (ar == null || !ar._isWrite)
+                    __Error.WrongAsyncResult();
+
+                if (ar._endXxxCalled)
+                    __Error.EndWriteCalledTwice();
+
+                ar._endXxxCalled = true;
+
+                ar.ThrowIfError();
+            }
+        }   // class SynchronousAsyncResult
+#endif
+
     }
 }

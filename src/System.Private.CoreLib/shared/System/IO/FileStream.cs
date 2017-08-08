@@ -5,6 +5,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Win32.SafeHandles;
+#if MONO
+using System.Diagnostics.Private;
+#endif
 using System.Diagnostics;
 
 namespace System.IO
@@ -161,7 +164,8 @@ namespace System.IO
                 throw new ArgumentOutOfRangeException(badArg, SR.ArgumentOutOfRange_Enum);
 
             // NOTE: any change to FileOptions enum needs to be matched here in the error validation
-            if (options != FileOptions.None && (options & ~(FileOptions.WriteThrough | FileOptions.Asynchronous | FileOptions.RandomAccess | FileOptions.DeleteOnClose | FileOptions.SequentialScan | FileOptions.Encrypted | (FileOptions)0x20000000 /* NoBuffering */)) != 0)
+            if (options != FileOptions.None && (options & ~(FileOptions.WriteThrough | FileOptions.Asynchronous | FileOptions.RandomAccess | FileOptions.DeleteOnClose 
+                        | FileOptions.SequentialScan | FileOptions.Encrypted | (FileOptions)0x20000000 /* NoBuffering */ | (FileOptions)1)) != 0)
                 throw new ArgumentOutOfRangeException(nameof(options), SR.ArgumentOutOfRange_Enum);
 
             if (bufferSize <= 0)

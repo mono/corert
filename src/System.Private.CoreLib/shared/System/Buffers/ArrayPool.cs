@@ -34,7 +34,9 @@ namespace System.Buffers
         /// The shared pool instance is created lazily on first access.
         /// </remarks>
         public static ArrayPool<T> Shared { get; } =
+#if !MONO
             typeof(T) == typeof(byte) || typeof(T) == typeof(char) ? new TlsOverPerCoreLockedStacksArrayPool<T>() :
+#endif
             Create();
 
         /// <summary>

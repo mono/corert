@@ -3,7 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+#if MONO
+using System.Diagnostics.Private;
+#else
 using System.Diagnostics;
+#endif
 using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;

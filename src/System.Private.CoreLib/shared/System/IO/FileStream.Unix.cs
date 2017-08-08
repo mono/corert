@@ -4,6 +4,9 @@
 
 using Microsoft.Win32.SafeHandles;
 using System.Diagnostics;
+#if MONO
+using System.Diagnostics.Private;
+#endif
 using System.Threading;
 using System.Threading.Tasks;
 
