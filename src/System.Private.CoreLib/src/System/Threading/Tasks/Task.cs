@@ -6019,7 +6019,9 @@ namespace System.Threading.Tasks
         //
         // This helper routine is targeted by the debugger.
         //
+#if !MONO
         [DependencyReductionRoot]
+#endif
         internal virtual Delegate[] GetDelegateContinuationsForDebugger()
         {
             return GetDelegatesFromContinuationObject(m_continuationObject);
@@ -6083,7 +6085,9 @@ namespace System.Threading.Tasks
         //
         // This helper routine is targeted by the debugger.
         //
+#if !MONO
         [DependencyReductionRoot]
+#endif
         private static Task GetActiveTaskFromId(int taskId)
         {
             return DebuggerSupport.GetActiveTaskFromId(taskId);
