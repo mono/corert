@@ -44,7 +44,7 @@ namespace System
 
         private ulong Low64
         {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
             get { return ((ulong)umid << 32) | ulo; }
             set { umid = (uint)(value >> 32); ulo = (uint)value; }
 #else
@@ -2550,7 +2550,7 @@ done:
 
                 public ulong Low64
                 {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
                     get => ((ulong)U1 << 32) | U0;
                     set { U1 = (uint)(value >> 32); U0 = (uint)value; }
 #else
@@ -2564,7 +2564,7 @@ done:
                 /// </summary>
                 public ulong High64
                 {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
                     get => ((ulong)U2 << 32) | U1;
                     set { U2 = (uint)(value >> 32); U1 = (uint)value; }
 #else
@@ -2593,7 +2593,7 @@ done:
 
                 public ulong Low64
                 {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
                     get => ((ulong)U1 << 32) | U0;
                     set { U1 = (uint)(value >> 32); U0 = (uint)value; }
 #else
@@ -2604,7 +2604,7 @@ done:
 
                 public ulong High64
                 {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
                     get => ((ulong)U3 << 32) | U2;
                     set { U3 = (uint)(value >> 32); U2 = (uint)value; }
 #else
@@ -2639,7 +2639,7 @@ done:
 
                 public ulong Low64
                 {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
                     get => ((ulong)U1 << 32) | U0;
                     set { U1 = (uint)(value >> 32); U0 = (uint)value; }
 #else
@@ -2650,7 +2650,7 @@ done:
 
                 public ulong Mid64
                 {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
                     get => ((ulong)U3 << 32) | U2;
                     set { U3 = (uint)(value >> 32); U2 = (uint)value; }
 #else
@@ -2661,7 +2661,7 @@ done:
 
                 public ulong High64
                 {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
                     get => ((ulong)U5 << 32) | U4;
                     set { U5 = (uint)(value >> 32); U4 = (uint)value; }
 #else
