@@ -7,16 +7,12 @@
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
-#if MONO
-namespace System.Diagnostics.Private
-#else
 namespace System.Diagnostics
-#endif
 {
     /// <summary>
     /// Provides a set of properties and methods for debugging code.
     /// </summary>
-#if !MONO
+#if !MONO || !INSIDE_CORLIB
     public
 #endif
     static partial class Debug
