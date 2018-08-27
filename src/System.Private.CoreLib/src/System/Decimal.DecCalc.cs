@@ -1,7 +1,7 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
+#if !__MonoCS__
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -43,7 +43,7 @@ namespace System
 
         private ulong Low64
         {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
             get { return ((ulong)umid << 32) | ulo; }
             set { umid = (uint)(value >> 32); ulo = (uint)value; }
 #else
@@ -2549,7 +2549,7 @@ done:
 
                 public ulong Low64
                 {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
                     get => ((ulong)U1 << 32) | U0;
                     set { U1 = (uint)(value >> 32); U0 = (uint)value; }
 #else
@@ -2563,7 +2563,7 @@ done:
                 /// </summary>
                 public ulong High64
                 {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
                     get => ((ulong)U2 << 32) | U1;
                     set { U2 = (uint)(value >> 32); U1 = (uint)value; }
 #else
@@ -2592,7 +2592,7 @@ done:
 
                 public ulong Low64
                 {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
                     get => ((ulong)U1 << 32) | U0;
                     set { U1 = (uint)(value >> 32); U0 = (uint)value; }
 #else
@@ -2603,7 +2603,7 @@ done:
 
                 public ulong High64
                 {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
                     get => ((ulong)U3 << 32) | U2;
                     set { U3 = (uint)(value >> 32); U2 = (uint)value; }
 #else
@@ -2638,7 +2638,7 @@ done:
 
                 public ulong Low64
                 {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
                     get => ((ulong)U1 << 32) | U0;
                     set { U1 = (uint)(value >> 32); U0 = (uint)value; }
 #else
@@ -2649,7 +2649,7 @@ done:
 
                 public ulong Mid64
                 {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
                     get => ((ulong)U3 << 32) | U2;
                     set { U3 = (uint)(value >> 32); U2 = (uint)value; }
 #else
@@ -2660,7 +2660,7 @@ done:
 
                 public ulong High64
                 {
-#if BIGENDIAN
+#if BIGENDIAN && !MONO
                     get => ((ulong)U5 << 32) | U4;
                     set { U5 = (uint)(value >> 32); U4 = (uint)value; }
 #else
@@ -2674,3 +2674,4 @@ done:
         }
     }
 }
+#endif
