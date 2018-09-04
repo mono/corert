@@ -4,7 +4,9 @@
 
 using System.Globalization;
 using System.Collections.Generic;
-
+#if MONO
+using System.Collections.ObjectModel;
+#endif
 namespace System.Reflection
 {
     public struct CustomAttributeTypedArgument
@@ -27,6 +29,16 @@ namespace System.Reflection
 
             Value = (value == null) ? null : CanonicalizeValue(value);
             ArgumentType = argumentType;
+#if MONO
+            if (value is Array) {
+                Array a = (Array)value;
+                Type etype = a.GetType().GetElementType();
+                CustomAttributeTypedArgument[] new_value = new CustomAttributeTypedArgument[a.GetLength(0)];
+                for (int i = 0; i < new_value.Length; ++i)
+                    new_value[i] = new CustomAttributeTypedArgument(etype, a.GetValue(i));
+                Value = new ReadOnlyCollection <CustomAttributeTypedArgument>(new_value);
+            }
+#endif
         }
 
         public Type ArgumentType { get; }
