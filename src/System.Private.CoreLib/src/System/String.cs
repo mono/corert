@@ -376,7 +376,7 @@ namespace System
         }
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        public extern String(ReadOnlySpan<char> value);
+        internal extern String(ReadOnlySpan<char> value);
 
         [DependencyReductionRoot]
         private unsafe static string Ctor(ReadOnlySpan<char> value)
