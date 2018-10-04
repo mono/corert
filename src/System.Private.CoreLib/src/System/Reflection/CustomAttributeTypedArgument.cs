@@ -33,7 +33,7 @@ namespace System.Reflection
                 CustomAttributeTypedArgument[] new_value = new CustomAttributeTypedArgument[a.GetLength(0)];
                 for (int i = 0; i < new_value.Length; ++i) {
                     var val = a.GetValue (i);
-                    var elemType = etype == typeof (System.Object) ? val.GetType () : etype;
+                    var elemType = etype == typeof (System.Object) && val != null ? val.GetType () : etype;
                     new_value[i] = new CustomAttributeTypedArgument (elemType, val);
                 }
                 Value = new System.Collections.ObjectModel.ReadOnlyCollection <CustomAttributeTypedArgument>(new_value);
