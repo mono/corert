@@ -89,7 +89,7 @@ namespace System.Globalization
             {
                 throw new ArgumentOutOfRangeException(nameof(year), SR.ArgumentOutOfRange_Year);
             }
-#if __MonoCS__ // mcs doesn't support local funtions
+#if __MonoCS__ // mcs doesn't support local functions
             Func<int, int> P = y => 
 #else
             int P(int y) => 
