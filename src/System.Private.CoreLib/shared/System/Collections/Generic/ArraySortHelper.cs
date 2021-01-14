@@ -41,7 +41,10 @@ namespace System.Collections.Generic
 
         internal static void ThrowOrIgnoreBadComparer(object comparer)
         {
-            throw new ArgumentException(SR.Format(SR.Arg_BogusIComparer, comparer));
+	    if (Environment.GetEnvironmentVariable ("MONO_IGNORE_BAD_COMPARER") == null)
+	    {
+                throw new ArgumentException(SR.Format(SR.Arg_BogusIComparer, comparer));
+	    }
         }
     }
 
